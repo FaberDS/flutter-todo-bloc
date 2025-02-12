@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tasks_app/blocs/bloc_exports.dart';
+import 'package:flutter_tasks_app/screens/my_drawer.dart';
 import 'package:flutter_tasks_app/widgets/tasks_list.dart';
 
 import '../models/task.dart';
@@ -39,6 +40,7 @@ class _TasksScreenState extends State<TasksScreen> {
               )
             ],
           ),
+          drawer: MyDrawer(),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
