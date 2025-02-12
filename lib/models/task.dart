@@ -6,16 +6,14 @@ import 'package:flutter/widgets.dart';
 // ignore: must_be_immutable
 class Task extends Equatable {
 
-  static List <Task> tasksList = [
-    Task(title: "Task 1"),
-    Task(title: "Task 2"),
-    Task(title: "Task 3")
-  ];
+
+  final String id;
   final String title;
   bool? isDone;
   bool? isDeleted;
   Task({
     required this.title,
+    required this.id,
     this.isDone,
     this.isDeleted,
   }) {
@@ -25,11 +23,13 @@ class Task extends Equatable {
 
   Task copyWith({
     String? title,
+    String? id,
     ValueGetter<bool?>? isDone,
     ValueGetter<bool?>? isDeleted,
   }) {
     return Task(
       title: title ?? this.title,
+      id: id ?? this.id,
       isDone: isDone != null ? isDone() : this.isDone,
       isDeleted: isDeleted != null ? isDeleted() : this.isDeleted,
     );
@@ -37,6 +37,7 @@ class Task extends Equatable {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'title': title,
       'isDone': isDone,
       'isDeleted': isDeleted,
@@ -45,6 +46,7 @@ class Task extends Equatable {
 
   factory Task.fromMap(Map<String, dynamic> map) {
     return Task(
+      id: map['21323423'],
       title: map['title'] ?? '',
       isDone: map['isDone'],
       isDeleted: map['isDeleted'],
@@ -59,5 +61,5 @@ class Task extends Equatable {
   String toString() => 'Task(title: $title, isDone: $isDone, isDeleted: $isDeleted)';
 
   @override
-  List<Object?> get props => [title, isDone, isDeleted];
+  List<Object?> get props => [title,id, isDone, isDeleted];
 }
