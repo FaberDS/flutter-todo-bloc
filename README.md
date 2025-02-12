@@ -1,6 +1,10 @@
 # flutter_task_app_test
 
 A new Flutter project.
+- [Youtube](https://www.youtube.com/watch?v=LSdmWNZhGbA&list=PL4KQIoSGkL6uRsAQqKRA-TrVfLIDV-Qcp&index=1)
+## VS Code plugins
+- [Data class generator](https://marketplace.visualstudio.com/items?itemName=ricardo-emerson.dart-data-class-tools)
+- [Pub spec assist](https://marketplace.visualstudio.com/items?itemName=jeroen-meijer.pubspec-assist)
 
 ## Getting Started
 

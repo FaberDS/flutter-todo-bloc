@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'blocs/bloc_exports.dart';
+import 'models/task.dart';
 import 'screens/tasks_screen.dart';
 
 void main() {
@@ -12,12 +13,15 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Tasks App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return BlocProvider(
+      create: (context) => TasksBloc()..add(AddTask(task: Task(title: "ABC"))),
+      child: MaterialApp(
+        title: 'Flutter Tasks App',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: const TasksScreen(),
       ),
-      home: const TasksScreen(),
     );
   }
 }
