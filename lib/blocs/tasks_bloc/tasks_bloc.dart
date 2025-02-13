@@ -51,23 +51,29 @@ class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
     final task = event.task;
     List<Task> pendingTasks = state.pendingTasks;
     List<Task> completedTasks = state.completedTasks;
-
-    task.isDone == false
+    List<Task> favoriteTasks = state.favoriteTasks;
+    task.isDone == true
         ? {
+          completedTasks = List.from(completedTasks)..remove(task),
+          pendingTasks = List.from(pendingTasks)
+              ..insert(0, task.copyWith(isDone: () => false))
+            
+          }
+        : {
             pendingTasks = List.from(pendingTasks)..remove(task),
             completedTasks = List.from(completedTasks)
               ..insert(0, task.copyWith(isDone: () => true))
-          }
-        : {
-            completedTasks = List.from(completedTasks)..remove(task),
-            pendingTasks = List.from(pendingTasks)
-              ..insert(0, task.copyWith(isDone: () => false))
           };
+    if (task.isFavorite == true) {
+      var tasksIndex = favoriteTasks.indexOf(task);
+      favoriteTasks = favoriteTasks..remove(task)
+      ..insert(tasksIndex,task.copyWith(isDone:()=>   task.isDone == true ? false : true));
+    }
     emit(TasksState(
         pendingTasks: pendingTasks,
         removedTasks: state.removedTasks,
         completedTasks: completedTasks,
-        favoriteTasks: state.favoriteTasks));
+        favoriteTasks: favoriteTasks));
   }
 
   void _onAddTask(AddTask event, Emitter<TasksState> emit) {
@@ -101,9 +107,9 @@ class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
         ..insert(taskIndex,task.copyWith(isFavorite: ()=>isNotFavorite));
     }
     if(isNotFavorite) {
-        favoriteTasks.add(task.copyWith(isFavorite: ()=>true));
+        favoriteTasks = List.from(favoriteTasks)..add(task.copyWith(isFavorite: ()=>true));
       } else {
-        favoriteTasks.remove(task);
+        favoriteTasks = List.from(favoriteTasks)..remove(task);
       }
       emit(TasksState(
         pendingTasks: pendingTasks,
