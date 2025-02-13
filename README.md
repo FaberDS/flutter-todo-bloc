@@ -6,6 +6,24 @@ A new Flutter project.
 - [Data class generator](https://marketplace.visualstudio.com/items?itemName=ricardo-emerson.dart-data-class-tools)
 - [Pub spec assist](https://marketplace.visualstudio.com/items?itemName=jeroen-meijer.pubspec-assist)
 
+## cleanup 
+```sh
+sudo chmod -R 777 ~/dev/flutter-examples/flutter_tasks_app_bloc/build/ios
+
+flutter clean
+flutter pub get
+cd ios
+pod cache clean --all
+rm -rf Pods
+rm -rf ~/Library/Caches/CocoaPods
+pod install --verbose
+cd ..
+cd android
+./gradlew clean
+cd ..
+flutter pub get
+flutter run
+```
 ## Getting Started
 
 This project is a starting point for a Flutter application.

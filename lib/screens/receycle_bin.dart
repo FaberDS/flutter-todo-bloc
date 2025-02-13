@@ -1,39 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tasks_app/blocs/bloc_exports.dart';
 import 'package:flutter_tasks_app/screens/my_drawer.dart';
 import 'package:flutter_tasks_app/widgets/tasks_list.dart';
 
-class ReceycleBin extends StatelessWidget {
-    static const id = 'receycle_bin_screen';
+import '../models/task.dart';
 
-const ReceycleBin({ Key? key }) : super(key: key);
+class ReceycleBin extends StatefulWidget {
+  static const id = 'receycle_bin_screen';
+
+  const ReceycleBin({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context){
-    return Scaffold(
+  State<ReceycleBin> createState() => _ReceycleBinState();
+}
+
+class _ReceycleBinState extends State<ReceycleBin> {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<TasksBloc, TasksState>(
+        builder: (context, state) {
+        List<Task> tasksList = state.removedTasks;
+        return Scaffold(
           appBar: AppBar(
             title: const Text('Receycle bin'),
-            actions: [
-              IconButton(
-                onPressed: (){},
-                icon: const Icon(Icons.add),
-              )
-            ],
+
           ),
           drawer: MyDrawer(),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-               Center(
+              Center(
                 child: Chip(
                   label: Text(
-                    ' Tasks',
+                    '${tasksList.length} Tasks',
                   ),
                 ),
               ),
-              TasksList(tasksList: [])
+              TasksList(tasksList:tasksList)
             ],
           ),
-        
         );
+      },
+    );
   }
 }
