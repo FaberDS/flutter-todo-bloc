@@ -13,6 +13,7 @@ class AddTaskWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
       TextEditingController titleController = TextEditingController();
+      TextEditingController descriptionController = TextEditingController();
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -20,10 +21,22 @@ class AddTaskWidget extends StatelessWidget {
         children: [
         const Text("Add Task", style: TextStyle(fontSize: 24.0)),
         const SizedBox(height: 20),
-        TextField(controller: titleController, 
+        Padding(
+          padding: const EdgeInsets.only(top:10,bottom:10),
+          child: TextField(controller: titleController, 
+            autofocus: true,
+            decoration: const InputDecoration(
+            label: Text("Title"),
+            border: OutlineInputBorder()
+          ),),
+        ),
+
+         TextField(controller: descriptionController, 
           autofocus: true,
+          minLines: 3,
+          maxLines: 5,
           decoration: const InputDecoration(
-          label: Text("Title"),
+          label: Text("Description"),
           border: OutlineInputBorder()
         ),),
         Row(
@@ -31,7 +44,11 @@ class AddTaskWidget extends StatelessWidget {
           children: [
             TextButton(onPressed: ()=>Navigator.pop(context), child: const Text('cancel')),
             ElevatedButton(onPressed: (){
-              var task = Task(title: titleController.text,id: GUIDGen.generate());
+              var task = Task(
+                title: titleController.text,
+                id: GUIDGen.generate(),
+                desctiption: descriptionController.text
+                );
               context.read<TasksBloc>().add(AddTask(task: task));
               Navigator.pop(context);
             }, child: const Text('add')),

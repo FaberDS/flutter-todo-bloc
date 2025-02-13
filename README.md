@@ -24,3 +24,8 @@ cd ..
 flutter pub get
 flutter run
 ```
+
+## Design
+### Tasktile Layout
+
+![Task tile layout](static/task_tile_layout.png)

@@ -9,11 +9,13 @@ class Task extends Equatable {
 
   final String id;
   final String title;
+  final String desctiption;
   bool? isDone;
   bool? isDeleted;
   Task({
-    required this.title,
     required this.id,
+    required this.title,
+    required this.desctiption,
     this.isDone,
     this.isDeleted,
   }) {
@@ -22,14 +24,16 @@ class Task extends Equatable {
   }
 
   Task copyWith({
-    String? title,
     String? id,
+    String? title,
+    String? desctiption,
     ValueGetter<bool?>? isDone,
     ValueGetter<bool?>? isDeleted,
   }) {
     return Task(
-      title: title ?? this.title,
       id: id ?? this.id,
+      title: title ?? this.title,
+      desctiption: desctiption ?? this.desctiption,
       isDone: isDone != null ? isDone() : this.isDone,
       isDeleted: isDeleted != null ? isDeleted() : this.isDeleted,
     );
@@ -39,6 +43,7 @@ class Task extends Equatable {
     return {
       'id': id,
       'title': title,
+      'desctiption': desctiption,
       'isDone': isDone,
       'isDeleted': isDeleted,
     };
@@ -46,8 +51,9 @@ class Task extends Equatable {
 
   factory Task.fromMap(Map<String, dynamic> map) {
     return Task(
-      id: map['21323423'],
+      id: map['id'] ?? '',
       title: map['title'] ?? '',
+      desctiption: map['desctiption'] ?? '',
       isDone: map['isDone'],
       isDeleted: map['isDeleted'],
     );
@@ -58,8 +64,18 @@ class Task extends Equatable {
   factory Task.fromJson(String source) => Task.fromMap(json.decode(source));
 
   @override
-  String toString() => 'Task(title: $title, isDone: $isDone, isDeleted: $isDeleted)';
+  String toString() {
+    return 'Task(id: $id, title: $title, desctiption: $desctiption, isDone: $isDone, isDeleted: $isDeleted)';
+  }
 
   @override
-  List<Object?> get props => [title,id, isDone, isDeleted];
+  List<Object?> get props {
+    return [
+      id,
+      title,
+      desctiption,
+      isDone,
+      isDeleted,
+    ];
+  }
 }

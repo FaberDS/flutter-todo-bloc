@@ -14,10 +14,10 @@ class TabsScreen extends StatefulWidget {
 }
 
 class _TabsScreenState extends State<TabsScreen> {
-  final List<Map<String,dynamic>> _pageDetails = [
-    {"pageName": PendingTasksScreen(),'title':"Pending Tasks"},
-    {"pageName": CompletedTasksScreen(),'title':"Completed Tasks"},
-    {"pageName": FavoriteTasksScreen(),'title':"Favorite Tasks"},
+  final List<Map<String, dynamic>> _pageDetails = [
+    {"pageName": PendingTasksScreen(), 'title': "Pending Tasks"},
+    {"pageName": CompletedTasksScreen(), 'title': "Completed Tasks"},
+    {"pageName": FavoriteTasksScreen(), 'title': "Favorite Tasks"},
   ];
 
   var _selectedIndex = 0;
@@ -25,6 +25,7 @@ class _TabsScreenState extends State<TabsScreen> {
   void _addTask(BuildContext context) {
     showModalBottomSheet(
         context: context,
+        isScrollControlled: true,
         builder: (context) => SingleChildScrollView(
               child: Container(
                   padding: EdgeInsets.only(
@@ -37,32 +38,36 @@ class _TabsScreenState extends State<TabsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(_pageDetails[_selectedIndex]['title']),
-           actions: [
-          IconButton(
-            onPressed: () => _addTask(context),
-            icon: const Icon(Icons.add),
-          )
-        ]),
+            title: Text(_pageDetails[_selectedIndex]['title']),
+            actions: [
+              IconButton(
+                onPressed: () => _addTask(context),
+                icon: const Icon(Icons.add),
+              )
+            ]),
         drawer: const MyDrawer(),
         body: _pageDetails[_selectedIndex]['pageName'],
-        floatingActionButton: _selectedIndex == 0 
-        ? FloatingActionButton(
-            onPressed: () => _addTask(context),
-            tooltip: 'Add Task',
-            child: const Icon(Icons.add))
-          : null,
+        floatingActionButton: _selectedIndex == 0
+            ? FloatingActionButton(
+                onPressed: () => _addTask(context),
+                tooltip: 'Add Task',
+                child: const Icon(Icons.add))
+            : null,
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: _selectedIndex,
-          onTap: (index){
+          onTap: (index) {
             setState(() {
               _selectedIndex = index;
             });
           },
           items: const [
-           BottomNavigationBarItem(icon: Icon(Icons.incomplete_circle_sharp),label: "Pending Tasks"),
-           BottomNavigationBarItem(icon:  Icon(Icons.done),label: "Completed Tasks"),
-           BottomNavigationBarItem(icon: Icon(Icons.favorite),label: "Favorite Tasks")
+            BottomNavigationBarItem(
+                icon: Icon(Icons.incomplete_circle_sharp),
+                label: "Pending Tasks"),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.done), label: "Completed Tasks"),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.favorite), label: "Favorite Tasks")
           ],
         ));
   }

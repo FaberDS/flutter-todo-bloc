@@ -19,7 +19,10 @@ class TaskTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text("${task.title} - ${task.isDeleted}",style: TextStyle(decoration: task.isDone! ? TextDecoration.lineThrough: null),),
+      title: Text(
+        "${task.title}",
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(decoration: task.isDone! ? TextDecoration.lineThrough: null),),
       trailing: Checkbox(
         value: task.isDone,  
         onChanged: task.isDeleted == false 
