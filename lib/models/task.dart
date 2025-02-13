@@ -10,32 +10,41 @@ class Task extends Equatable {
   final String id;
   final String title;
   final String desctiption;
+  final String date;
   bool? isDone;
   bool? isDeleted;
+  bool? isFavorite;
   Task({
     required this.id,
     required this.title,
     required this.desctiption,
+    required this.date,
     this.isDone,
     this.isDeleted,
+    this.isFavorite,
   }) {
     isDone = isDone ?? false;
     isDeleted = isDeleted ?? false;
+    isFavorite = isFavorite ?? false;
   }
 
   Task copyWith({
     String? id,
     String? title,
     String? desctiption,
+    String? date,
     ValueGetter<bool?>? isDone,
     ValueGetter<bool?>? isDeleted,
+    ValueGetter<bool?>? isFavorite,
   }) {
     return Task(
       id: id ?? this.id,
       title: title ?? this.title,
       desctiption: desctiption ?? this.desctiption,
+      date: date ?? this.date,
       isDone: isDone != null ? isDone() : this.isDone,
       isDeleted: isDeleted != null ? isDeleted() : this.isDeleted,
+      isFavorite: isFavorite != null ? isFavorite() : this.isFavorite,
     );
   }
 
@@ -44,8 +53,10 @@ class Task extends Equatable {
       'id': id,
       'title': title,
       'desctiption': desctiption,
+      'date': date,
       'isDone': isDone,
       'isDeleted': isDeleted,
+      'isFavorite': isFavorite,
     };
   }
 
@@ -54,8 +65,10 @@ class Task extends Equatable {
       id: map['id'] ?? '',
       title: map['title'] ?? '',
       desctiption: map['desctiption'] ?? '',
+      date: map['date'] ?? '',
       isDone: map['isDone'],
       isDeleted: map['isDeleted'],
+      isFavorite: map['isFavorite'],
     );
   }
 
@@ -65,7 +78,7 @@ class Task extends Equatable {
 
   @override
   String toString() {
-    return 'Task(id: $id, title: $title, desctiption: $desctiption, isDone: $isDone, isDeleted: $isDeleted)';
+    return 'Task(id: $id, title: $title, desctiption: $desctiption, date: $date, isDone: $isDone, isDeleted: $isDeleted, isFavorite: $isFavorite)';
   }
 
   @override
@@ -74,8 +87,10 @@ class Task extends Equatable {
       id,
       title,
       desctiption,
+      date,
       isDone,
       isDeleted,
+      isFavorite,
     ];
   }
 }

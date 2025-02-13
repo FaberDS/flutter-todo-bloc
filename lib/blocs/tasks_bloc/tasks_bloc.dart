@@ -12,6 +12,7 @@ class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
     on<UpdateTask>(_onUpdateTask);
     on<RemoveTask>(_onRemoveTask);
     on<DeleteTask>(_onDeleteTask);
+    on<MarkFavoriteOrUnfavoriteTask>(_onMarkFavoriteOrUnfavoriteTask);
   }
 
   void _onRemoveTask(RemoveTask event, Emitter<TasksState> emit) {
@@ -37,7 +38,8 @@ class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
     emit(TasksState(
       favoriteTasks: state.favoriteTasks, 
       removedTasks: removedTasks,
-      completedTasks: state.completedTasks
+      completedTasks: state.completedTasks,
+      pendingTasks: state.pendingTasks
       ));
   }
 
@@ -74,6 +76,39 @@ class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
         completedTasks: state.completedTasks));
   }
 
+
+  void _onMarkFavoriteOrUnfavoriteTask(MarkFavoriteOrUnfavoriteTask event, Emitter<TasksState> emit) {
+    final state = this.state;
+    final task = event.task;
+    List<Task> pendingTasks = state.pendingTasks;
+    List<Task> completedTasks = state.completedTasks;
+    List<Task> favoriteTasks = state.favoriteTasks;
+    final isNotFavorite = event.task.isFavorite == false;
+
+    if (event.task.isDone == false) {
+      var taskIndex = pendingTasks.indexOf(task);
+      final isNotFavorite = event.task.isFavorite == false;
+      pendingTasks = List.from(pendingTasks)
+        ..remove(task)
+        ..insert(taskIndex,task.copyWith(isFavorite: ()=>isNotFavorite));
+    } else {
+      var taskIndex = completedTasks.indexOf(task);
+      completedTasks = List.from(completedTasks)
+        ..remove(task)
+        ..insert(taskIndex,task.copyWith(isFavorite: ()=>isNotFavorite));
+    }
+    if(isNotFavorite) {
+        favoriteTasks.add(task.copyWith(isFavorite: ()=>true));
+      } else {
+        favoriteTasks.remove(task);
+      }
+      emit(TasksState(
+        pendingTasks: pendingTasks,
+        removedTasks: state.removedTasks,
+        favoriteTasks: favoriteTasks,
+        completedTasks: completedTasks
+      ));
+  }
   @override
   TasksState? fromJson(Map<String, dynamic> json) {
     return TasksState.fromMap(json);

@@ -29,3 +29,12 @@ flutter run
 ### Tasktile Layout
 
 ![Task tile layout](static/task_tile_layout.png)
+
+
+## Dependencies
+### intl
+```dart
+Text(DateFormat().add_yMEd().format(DateTime.now()))
+Text(DateFormat().add_yMEd().add_Hms().format(DateTime.now()))
+Text(DateFormat('dd-MM-yyyy hh:mm:ss').format(DateTime.now()))
+```

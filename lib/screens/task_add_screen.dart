@@ -47,7 +47,9 @@ class AddTaskWidget extends StatelessWidget {
               var task = Task(
                 title: titleController.text,
                 id: GUIDGen.generate(),
-                desctiption: descriptionController.text
+                desctiption: descriptionController.text,
+                isFavorite: false,
+                date: DateTime.now().toIso8601String()
                 );
               context.read<TasksBloc>().add(AddTask(task: task));
               Navigator.pop(context);
