@@ -14,6 +14,8 @@ class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
     on<DeleteTask>(_onDeleteTask);
     on<MarkFavoriteOrUnfavoriteTask>(_onMarkFavoriteOrUnfavoriteTask);
     on<EditTask>(_onEditTask);
+    on<RestoreTask>(_onRestoreTask);
+    on<DeleteAllTask>(_onDeleteAllTask);
   }
 
   void _onRemoveTask(RemoveTask event, Emitter<TasksState> emit) {
@@ -130,6 +132,30 @@ class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
     ));
   }
 
+  void _onRestoreTask(RestoreTask event, Emitter<TasksState> emit) {
+    final state = this.state;
+    emit(TasksState(
+        removedTasks:  List.from(state.removedTasks)..remove(event.task),
+        pendingTasks: List.from(state.pendingTasks)
+          ..insert(0,event.task.copyWith(
+            isDeleted: ()=> false,
+            isDone: ()=>false,
+            isFavorite: ()=> event.task.isFavorite
+          )),
+          completedTasks: state.completedTasks,
+          favoriteTasks: state.favoriteTasks
+    ));
+  }
+
+  void _onDeleteAllTask(DeleteAllTask event, Emitter<TasksState> emit) {
+    final state = this.state;
+    emit(TasksState(
+        removedTasks: List.from(state.removedTasks)..clear(),
+        pendingTasks: state.pendingTasks,
+        completedTasks: state.completedTasks,
+        favoriteTasks: state.favoriteTasks
+    ));
+  }
   @override
   TasksState? fromJson(Map<String, dynamic> json) {
     return TasksState.fromMap(json);

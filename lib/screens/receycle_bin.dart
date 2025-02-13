@@ -18,13 +18,22 @@ class _ReceycleBinState extends State<ReceycleBin> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<TasksBloc, TasksState>(
-        builder: (context, state) {
+      builder: (context, state) {
         List<Task> tasksList = state.removedTasks;
         return Scaffold(
-          appBar: AppBar(
-            title: const Text('Receycle bin'),
-
-          ),
+          appBar: AppBar(title: const Text('Receycle bin'), actions: [
+            PopupMenuButton(
+                itemBuilder: (context) => [
+                      PopupMenuItem(
+                        child: TextButton.icon(
+                            onPressed: null,
+                            label: const Text("Delete all"),
+                            icon: const Icon(Icons.edit)),
+                        onTap: () =>
+                            context.read<TasksBloc>().add(DeleteAllTask()),
+                      ),
+                    ])
+          ]),
           drawer: MyDrawer(),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -36,7 +45,7 @@ class _ReceycleBinState extends State<ReceycleBin> {
                   ),
                 ),
               ),
-              TasksList(tasksList:tasksList)
+              TasksList(tasksList: tasksList)
             ],
           ),
         );
