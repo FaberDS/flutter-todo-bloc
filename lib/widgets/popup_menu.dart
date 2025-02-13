@@ -8,11 +8,13 @@ class PopupMenu extends StatelessWidget {
 
   final VoidCallback cancelOrDeleteCallback;
   final VoidCallback likeOrDislike;
+  final VoidCallback editTaskCallback;
 
   const PopupMenu(
       {Key? key, required this.task, 
       required this.cancelOrDeleteCallback,
-      required this.likeOrDislike
+      required this.likeOrDislike,
+      required this.editTaskCallback
       })
       : super(key: key);
 
@@ -26,7 +28,7 @@ class PopupMenu extends StatelessWidget {
                         onPressed: null,
                         label: const Text("Edit"),
                         icon: const Icon(Icons.edit)),
-                    onTap: () {},
+                    onTap: editTaskCallback,
                   ),
                   PopupMenuItem(
                     child: TextButton.icon(
