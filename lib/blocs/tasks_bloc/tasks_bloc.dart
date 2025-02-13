@@ -1,4 +1,3 @@
-
 import 'package:equatable/equatable.dart';
 import 'package:flutter_tasks_app/blocs/bloc_exports.dart';
 import 'package:flutter_tasks_app/models/task.dart';
@@ -19,8 +18,13 @@ class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
     final state = this.state;
     final task = event.task;
     emit(TasksState(
-      removedTasks: List.from(state.removedTasks)..add(event.task.copyWith(isDeleted: ()=>true)), 
-      allTasks: List.from(state.allTasks)..remove(task)));
+        removedTasks: List.from(state.removedTasks)
+          ..add(event.task.copyWith(isDeleted: () => true)),
+        favoriteTasks: List.from(state.favoriteTasks)..remove(task),
+        completedTasks: List.from(state.completedTasks)..remove(task),
+        pendingTasks: List.from(state.pendingTasks)..remove(task)
+        )
+        );
   }
 
   void _onDeleteTask(DeleteTask event, Emitter<TasksState> emit) {
@@ -31,32 +35,50 @@ class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
     print("removedTasks: ${removedTasks.length}");
 
     emit(TasksState(
-      allTasks: state.allTasks,
-      removedTasks: removedTasks
+      favoriteTasks: state.favoriteTasks, 
+      removedTasks: removedTasks,
+      completedTasks: state.completedTasks
       ));
   }
+
   void _onUpdateTask(UpdateTask event, Emitter<TasksState> emit) {
     final state = this.state;
     final task = event.task;
-  final int index = state.allTasks.indexOf(task);
-    List<Task> allTasks = List.from(state.allTasks)..remove(task);
-    task.isDone == false  
-      ? allTasks.insert(index,task.copyWith(isDone: ()=>true))
-      :  allTasks.insert(index,task.copyWith(isDone: ()=>false));
-      emit(TasksState(allTasks: allTasks,removedTasks: state.removedTasks));
+    List<Task> pendingTasks = state.pendingTasks;
+    List<Task> completedTasks = state.completedTasks;
+
+    task.isDone == false
+        ? {
+            pendingTasks = List.from(pendingTasks)..remove(task),
+            completedTasks = List.from(completedTasks)
+              ..insert(0, task.copyWith(isDone: () => true))
+          }
+        : {
+            completedTasks = List.from(completedTasks)..remove(task),
+            pendingTasks = List.from(pendingTasks)
+              ..insert(0, task.copyWith(isDone: () => false))
+          };
+    emit(TasksState(
+        pendingTasks: pendingTasks,
+        removedTasks: state.removedTasks,
+        completedTasks: completedTasks,
+        favoriteTasks: state.favoriteTasks));
   }
 
   void _onAddTask(AddTask event, Emitter<TasksState> emit) {
     final state = this.state;
-    emit(TasksState(allTasks: List.from(state.allTasks)..add(event.task)
-    ,removedTasks: state.removedTasks));
+    emit(TasksState(
+        pendingTasks: List.from(state.pendingTasks)..add(event.task),
+        removedTasks: state.removedTasks,
+        favoriteTasks: state.favoriteTasks,
+        completedTasks: state.completedTasks));
   }
-  
+
   @override
   TasksState? fromJson(Map<String, dynamic> json) {
     return TasksState.fromMap(json);
   }
-  
+
   @override
   Map<String, dynamic>? toJson(TasksState state) {
     return state.toMap();
